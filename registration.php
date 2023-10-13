@@ -57,6 +57,7 @@
 </html>
 
 <?php 
+    session_start();
     if (isset($_POST['submit'])) {
         register(); // Call the register function when the form is submitted
     }
