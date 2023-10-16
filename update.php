@@ -11,7 +11,10 @@
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
     ?>
-
+    <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
+    <p>
+    <a href="login.php">Logout</a>
+    <br>
     <h1>Update Song Rating</h1>
     <form method="POST" id="updateForm">
         Username: <?php echo $_SESSION['username']; ?>

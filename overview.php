@@ -7,7 +7,7 @@
 <body>
     <?php session_start(); ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
-    <br>
+    <p>
     <a href="login.php">Logout</a>
     <br>
     <h1>Song Ratings</h1>
@@ -38,13 +38,13 @@
                 echo "<td>" . $row['rating'] . "</td>";
                 echo "<td>";
                 if ($row['username'] == $_SESSION['username']) {
-                    echo "<a href='view.php?id=" . $row['ID'] . "'>View</a> ";
+                    echo "<a href='viewrating.php?id=" . $row['ID'] . "'>View</a> ";
                     // User can see "Update" and "Delete" links for their own ratings
                     echo "<a href='update.php?id=" . $row['ID'] . "'>Update</a> ";
                     echo "<a href='delete.php?id=" . $row['ID'] . "'>Delete</a>";
                 } else {
                     // User can only see "View" link for other ratings
-                    echo "<a href='view.php?id=" . $row['ID'] . "'>View</a>";
+                    echo "<a href='viewrating.php?id=" . $row['ID'] . "'>View</a>";
                 }
                 echo "</td>";
                 echo "</tr>";
