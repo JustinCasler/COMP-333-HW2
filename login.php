@@ -5,9 +5,7 @@
     <title>Login</title>
     </head>
 
-<!-- 
-  HTML form displayed to the user
- -->
+    <!-- HTML form displayed to the user -->
     <h1>Welcome to Music DB</h1>
     <h2>Login</h2>
     <text> Please fill in your credentials to login </text>
@@ -21,7 +19,7 @@
             <button type="submit" name="login">Login</button>
         </form>
         <p>
-        Dont have an account? <a href="registration.php">Sign up now</a>
+        Don't have an account? <a href="registration.php">Sign up now</a>
     </body>
 </html>
 
@@ -30,23 +28,44 @@ session_start();
 include_once 'includes/dbh.php';
 
 if (isset($_POST['login'])) {
-    $username = mysqli_real_escape_string($conn, $_POST['name']);
+    $username = $_POST['name'];
     $password = $_POST['password'];
 
-    $sql_check = "SELECT * FROM users WHERE username = '$username';";
-    $result_check = mysqli_query($conn, $sql_check);
+    // Prepare the SQL statement with placeholders
+    $sql_check = "SELECT * FROM users WHERE username = ?";
+    
+    // Create a prepared statement
+    $stmt = $conn->prepare($sql_check);
 
-    if (mysqli_num_rows($result_check) == 1) {
-        $row = mysqli_fetch_assoc($result_check);
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['username'] = $username; // Store the username in a session
-            $_SESSION['loggedin'] = true;
-            header('Location: overview.php'); // Redirect to the dashboard or another authenticated page
+    if ($stmt) {
+        // Bind the parameter to the prepared statement
+        $stmt->bind_param("s", $username);
+
+        // Execute the prepared statement
+        if ($stmt->execute()) {
+            // Get the result
+            $result_check = $stmt->get_result();
+
+            if ($result_check->num_rows == 1) {
+                $row = $result_check->fetch_assoc();
+                if (password_verify($password, $row['password'])) {
+                    $_SESSION['username'] = $username; // Store the username in a session
+                    $_SESSION['loggedin'] = true;
+                    header('Location: overview.php'); // Redirect to the dashboard or another authenticated page
+                } else {
+                    echo "Incorrect password. Please try again.";
+                }
+            } else {
+                echo "Username not found. Please register or try a different username.";
+            }
         } else {
-            echo "Incorrect password. Please try again.";
+            echo "Error executing the query: " . $stmt->error;
         }
+
+        // Close the prepared statement
+        $stmt->close();
     } else {
-        echo "Username not found. Please register or try a different username.";
+        echo "Error preparing the statement: " . $conn->error;
     }
 }
 ?>

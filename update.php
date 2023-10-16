@@ -7,9 +7,14 @@
         $id = $_GET['id'];
 
         // Retrieve the current rating data based on the provided ID
-        $sql = "SELECT ID, username, artist, song, rating FROM ratings WHERE ID = $id";
-        $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
+        $sql = "SELECT ID, username, artist, song, rating FROM ratings WHERE ID = ?";
+        
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $row = $result->fetch_assoc();
     ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
     <p>
@@ -36,10 +41,12 @@
         $newSong = $_POST["song"];
         $newRating = $_POST["rating"];
 
-        // Update the rating in the database
-        $updateSql = "UPDATE ratings SET artist = '$newArtist', song = '$newSong', rating = $newRating WHERE ID = $id";
-        
-        if ($conn->query($updateSql) === TRUE) {
+        // Update the rating in the database using a prepared statement
+        $updateSql = "UPDATE ratings SET artist = ?, song = ?, rating = ? WHERE ID = ?";
+        $stmtUpdate = $conn->prepare($updateSql);
+        $stmtUpdate->bind_param("ssii", $newArtist, $newSong, $newRating, $id);
+
+        if ($stmtUpdate->execute()) {
             header("Location: overview.php");
             exit();
         } else {
