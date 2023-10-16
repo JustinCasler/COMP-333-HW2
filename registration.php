@@ -44,9 +44,9 @@
         <form method="POST" onsubmit="return validateForm()">  
             Username: <input type="text" name="name" id="username">
             <br>
-            Password: <input type="password" name="pwd" id="password">
+            Password: <input type="password" name="password" id="password">
             <br>
-            Confirm Password: <input type="password" name="confirmPwd" id="confirmPassword">
+            Confirm Password: <input type="password" name="confirmPassword" id="confirmPassword">
             <br>
             <button type="submit" name="submit">Submit</button>
             <button type="button" name="clear" onclick="clearForm()">Clear</button>
@@ -65,7 +65,7 @@
         include_once 'includes/dbh.php';
     
         $username = mysqli_real_escape_string($conn, $_POST['name']);
-        $password = mysqli_real_escape_string($conn, $_POST['pwd']);
+        $password = mysqli_real_escape_string($conn, $_POST['password']);
     
         $sql_check = "SELECT * FROM users WHERE username = ?";
         $stmt = mysqli_prepare($conn, $sql_check);
@@ -79,7 +79,7 @@
         } else {
             // Username is unique, hash the password and insert it into the database
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $sql = "INSERT INTO users (username, pwd) VALUES (?, ?)";
+            $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, 'ss', $username, $hashed_password);
             mysqli_stmt_execute($stmt);
