@@ -24,36 +24,49 @@
         </tr>
         <?php
         include_once 'includes/dbh.php';
-        // Retrieve and display all ratings from the database
-        $sql = "SELECT ID, username, artist, song, rating FROM ratings";
-        $result = mysqli_query($conn, $sql);
 
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<tr>";
-                echo "<td>" . $row['ID'] . "</td>";
-                echo "<td>" . $row['username'] . "</td>";
-                echo "<td>" . $row['artist'] . "</td>";
-                echo "<td>" . $row['song'] . "</td>";
-                echo "<td>" . $row['rating'] . "</td>";
-                echo "<td>";
-                if ($row['username'] == $_SESSION['username']) {
-                    echo "<a href='viewrating.php?id=" . $row['ID'] . "'>View</a> ";
-                    // User can see "Update" and "Delete" links for their own ratings
-                    echo "<a href='update.php?id=" . $row['ID'] . "'>Update</a> ";
-                    echo "<a href='delete.php?id=" . $row['ID'] . "'>Delete</a>";
-                } else {
-                    // User can only see "View" link for other ratings
-                    echo "<a href='viewrating.php?id=" . $row['ID'] . "'>View</a>";
+        // Prepare the SQL statement with placeholders
+        $sql = "SELECT ID, username, artist, song, rating FROM ratings";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt) {
+            // Execute the prepared statement
+            if ($stmt->execute()) {
+                // Bind the result variables
+                $stmt->bind_result($id, $username, $artist, $song, $rating);
+
+                while ($stmt->fetch()) {
+                    echo "<tr>";
+                    echo "<td>" . $id . "</td>";
+                    echo "<td>" . $username . "</td>";
+                    echo "<td>" . $artist . "</td>";
+                    echo "<td>" . $song . "</td>";
+                    echo "<td>" . $rating . "</td>";
+                    echo "<td>";
+                    if ($username == $_SESSION['username']) {
+                        echo "<a href='viewrating.php?id=" . $id . "'>View</a> ";
+                        // User can see "Update" and "Delete" links for their own ratings
+                        echo "<a href='update.php?id=" . $id . "'>Update</a> ";
+                        echo "<a href='delete.php?id=" . $id . "'>Delete</a>";
+                    } else {
+                        // User can only see "View" link for other ratings
+                        echo "<a href='viewrating.php?id=" . $id . "'>View</a>";
+                    }
+                    echo "</td>";
+                    echo "</tr>";
                 }
-                echo "</td>";
-                echo "</tr>";
+            } else {
+                echo "Error executing the query: " . $stmt->error;
             }
+
+            // Close the prepared statement
+            $stmt->close();
         } else {
-            echo "No ratings found.";
+            echo "Error preparing the statement: " . $conn->error;
         }
         ?>
     </table>
 </body>
 </html>
+
 

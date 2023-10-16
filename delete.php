@@ -14,16 +14,20 @@
         }
 
         // Check if the rating with the specified ID exists
-        $sql_check = "SELECT id, username FROM ratings WHERE id = '$id'";
-        $result_check = mysqli_query($conn, $sql_check);
+        $sql_check = "SELECT id, username FROM ratings WHERE id = ?";
+        
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->bind_param("i", $id);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
 
-        if (mysqli_num_rows($result_check) === 0) {
+        if ($result_check->num_rows === 0) {
             // Rating not found, show an error or redirect to an error page
             echo "Rating not found.";
             exit;
         }
 
-        $ratingData = mysqli_fetch_assoc($result_check);
+        $ratingData = $result_check->fetch_assoc();
 
         if ($ratingData['username'] !== $_SESSION['username']) {
             // The rating does not belong to the current user, so they can't delete it.
@@ -34,13 +38,16 @@
         // Handle the deletion when the user confirms
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteRating'])) {
             // Perform the deletion of the rating
-            $sql_delete = "DELETE FROM ratings WHERE id = '$id'";
-            if ($conn->query($sql_delete) === TRUE) {
+            $sql_delete = "DELETE FROM ratings WHERE id = ?";
+            
+            $stmt_delete = $conn->prepare($sql_delete);
+            $stmt_delete->bind_param("i", $id);
+            if ($stmt_delete->execute()) {
                 // Redirect to the overview page after successful deletion
                 header("Location: overview.php");
                 exit();
             } else {
-                echo "Error: " . $sql_delete . "<br>" . $conn->error;
+                echo "Error during deletion.";
             }
         }
     ?>

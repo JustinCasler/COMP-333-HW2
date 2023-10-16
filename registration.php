@@ -36,9 +36,7 @@
     </script>
     </head>
 
-<!-- 
-  HTML form displayed to the user
- -->
+    <!-- HTML form displayed to the user -->
     <h1>Music DB Sign Up</h1>
     <body>
         <form method="POST" onsubmit="return validateForm()">  
@@ -64,27 +62,56 @@
     function register() {
         include_once 'includes/dbh.php';
     
-        $username = mysqli_real_escape_string($conn, $_POST['name']);
-        $password = mysqli_real_escape_string($conn, $_POST['password']);
+        $username = $_POST['name'];
+        $password = $_POST['password'];
     
+        // Prepare the SQL statement with placeholders
         $sql_check = "SELECT * FROM users WHERE username = ?";
-        $stmt = mysqli_prepare($conn, $sql_check);
-        mysqli_stmt_bind_param($stmt, 's', $username);
-        mysqli_stmt_execute($stmt);
-        $result_check = mysqli_stmt_get_result($stmt);
     
-        if (mysqli_num_rows($result_check) > 0) {
-            // Username already exists, so alert the user and do not insert into the database
-            echo "Username already exists. Please choose another username.";
+        // Create a prepared statement
+        $stmt = $conn->prepare($sql_check);
+    
+        if ($stmt) {
+            // Bind the parameter to the prepared statement
+            $stmt->bind_param('s', $username);
+    
+            // Execute the prepared statement
+            if ($stmt->execute()) {
+                // Get the result
+                $result_check = $stmt->get_result();
+    
+                if ($result_check->num_rows > 0) {
+                    // Username already exists, so alert the user and do not insert into the database
+                    echo "Username already exists. Please choose another username.";
+                } else {
+                    // Username is unique, hash the password and insert it into the database
+                    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+                    $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+                    $stmt = $conn->prepare($sql);
+    
+                    if ($stmt) {
+                        // Bind parameters to the placeholders
+                        $stmt->bind_param('ss', $username, $hashed_password);
+    
+                        // Execute the prepared statement
+                        if ($stmt->execute()) {
+                            // Redirect to login
+                            header('Location: login.php');
+                        } else {
+                            echo "Error inserting into the database: " . $stmt->error;
+                        }
+                    } else {
+                        echo "Error preparing the insert statement: " . $conn->error;
+                    }
+                }
+            } else {
+                echo "Error executing the query: " . $stmt->error;
+            }
+    
+            // Close the prepared statement
+            $stmt->close();
         } else {
-            // Username is unique, hash the password and insert it into the database
-            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
-            $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, 'ss', $username, $hashed_password);
-            mysqli_stmt_execute($stmt);
-            //redirect to login
-            header('Location: login.php'); 
+            echo "Error preparing the select statement: " . $conn->error;
         }
     }
 ?>

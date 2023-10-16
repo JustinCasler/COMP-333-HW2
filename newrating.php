@@ -59,16 +59,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['addnewrating'])) {
         echo "Rating must be an integer between 1 and 5.";
     } else {
         // Check if the user has already rated the same song by the same artist
-        $sql_check = "SELECT id FROM ratings WHERE username = '$username' AND artist = '$artist' AND song = '$song'";
-        $result_check = mysqli_query($conn, $sql_check);
+        $sql_check = "SELECT id FROM ratings WHERE username = ? AND artist = ? AND song = ?";
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->bind_param('sss', $username, $artist, $song);
+        $stmt_check->execute();
+        $stmt_check->store_result();
 
-        if (mysqli_num_rows($result_check) > 0) {
+        if ($stmt_check->num_rows > 0) {
             echo "You have already rated this song by the same artist.";
         } else {
-            // Insert the new rating into the "ratings" table
-            $sql = "INSERT INTO ratings (username, artist, song, rating) VALUES ('$username', '$artist', '$song', $rating)";
-            
-            if ($conn->query($sql) === TRUE) {
+            // Insert the new rating into the "ratings" table using a prepared statement
+            $sql = "INSERT INTO ratings (username, artist, song, rating) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('sssi', $username, $artist, $song, $rating);
+
+            if ($stmt->execute()) {
                 // Redirect to overview.php
                 header("Location: overview.php");
                 exit();
