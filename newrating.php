@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
+    <?php session_start(); ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
     <br>
     <a href="login.php">Logout</a>
@@ -15,7 +16,7 @@
         Rating: <input type="number" name="rating" id="rating" min="1" max="5" required>
         <br>
         <button type="submit" name="addnewrating">Submit</button>
-        <a href="login.php">Cancel</a>
+        <a href="overview.php">Cancel</a>
     </form>
 
     <script>
@@ -37,7 +38,6 @@
 
 <?php
 // Start a session to maintain user login state
-session_start();
 include_once 'includes/dbh.php';
 
 // Check if the user is logged in
