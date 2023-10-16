@@ -3,7 +3,7 @@
 <body>
     <?php session_start(); ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
-    <br>
+    <p>
     <a href="login.php">Logout</a>
     <h1>Add New Rating</h1>
     <form method="POST" onsubmit="return validateForm()">  

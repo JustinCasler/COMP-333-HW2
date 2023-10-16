@@ -7,7 +7,7 @@
 <body>
     <?php session_start(); ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
-    <br>
+    <p>
     <a href="login.php">Logout</a>
     <br>
     <h1>Song Ratings</h1>
