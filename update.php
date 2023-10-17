@@ -31,7 +31,7 @@
         Rating: <input type="number" name="rating" value="<?php echo $row['rating']; ?>" id="rating" min="1" max="5" required>
         <br>
         <button type="submit" name="update">Update</button>
-        <a href="overview.php">Cancel</a>
+        <a href="index.php">Cancel</a>
     </form>
     
     <?php
@@ -47,7 +47,7 @@
         $stmtUpdate->bind_param("ssii", $newArtist, $newSong, $newRating, $id);
 
         if ($stmtUpdate->execute()) {
-            header("Location: overview.php");
+            header("Location: index.php");
             exit();
         } else {
             echo "Error updating rating: " . $conn->error;

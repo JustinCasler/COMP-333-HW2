@@ -51,7 +51,7 @@ if (isset($_POST['login'])) {
                 if (password_verify($password, $row['password'])) {
                     $_SESSION['username'] = $username; // Store the username in a session
                     $_SESSION['loggedin'] = true;
-                    header('Location: overview.php'); // Redirect to the dashboard or another authenticated page
+                    header('Location: index.php'); // Redirect to the dashboard or another authenticated page
                 } else {
                     echo "Incorrect password. Please try again.";
                 }

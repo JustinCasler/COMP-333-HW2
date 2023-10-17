@@ -5,7 +5,13 @@
     <title>Overview</title>
 </head>
 <body>
-    <?php session_start(); ?>
+    <?php 
+        session_start(); 
+        if (!isset($_SESSION['username'])) {
+            header("Location: login.php");
+            exit(); // Stop executing the rest of the page
+        }
+    ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
     <p>
     <a href="login.php">Logout</a>
@@ -68,5 +74,3 @@
     </table>
 </body>
 </html>
-
-

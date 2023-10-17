@@ -43,6 +43,6 @@
     <p>
     <strong><?php echo $row['rating']; ?></strong>
     <p>
-    <a href="overview.php">Back</a>
+    <a href="index.php">Back</a>
 </body>
 </html>
