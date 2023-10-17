@@ -31,3 +31,5 @@ To set up this project locally. Clone this repo and download xxamp and set up yo
 - includes/dbh.php: Code that establishes a connection with our database that can be called in any php code.
 
 ## Deployment
+
+Visit out site [here](http://playlistpulse.great-site.net/)
