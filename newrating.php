@@ -4,7 +4,7 @@
     <?php session_start(); ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
     <p>
-    <a href="login.php">Logout</a>
+    <a href="?logout=1">Logout</a>
     <h1>Add New Rating</h1>
     <form method="POST" onsubmit="return validateForm()">  
         Username: <?php echo $_SESSION['username']; ?>
@@ -39,7 +39,14 @@
 <?php
 // Start a session to maintain user login state
 include_once 'includes/dbh.php';
-
+//End session and redirect to login.php when user click on the logout link
+if (isset($_GET['logout'])) {
+    // User clicked the logout link
+    session_destroy(); // Destroy the session data
+    $conn->close(); // Close the database connection
+    header("Location: login.php"); // Redirect to the login page
+    exit(); // Stop executing the rest of the page
+}
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
     // Redirect to the login page if not logged in

@@ -4,6 +4,15 @@
     <?php
         session_start();
         include_once 'includes/dbh.php';
+        //End session and redirect to login.php when user click on the logout link
+        if (isset($_GET['logout'])) {
+            // User clicked the logout link
+            session_destroy(); // Destroy the session data
+            $conn->close(); // Close the database connection
+            header("Location: login.php"); // Redirect to the login page
+            exit(); // Stop executing the rest of the page
+        }
+
         $id = $_GET['id'];
 
         // Check if the user is logged in
@@ -54,7 +63,7 @@
 
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
     <p>
-    <a href="login.php">Logout</a>
+    <a href="?logout=1">Logout</a>
     <br>
     <h1>Delete Rating</h1>
     <p>Are you sure you want to delete this rating?</p>
