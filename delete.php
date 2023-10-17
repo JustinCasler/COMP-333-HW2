@@ -43,8 +43,8 @@
             $stmt_delete = $conn->prepare($sql_delete);
             $stmt_delete->bind_param("i", $id);
             if ($stmt_delete->execute()) {
-                // Redirect to the overview page after successful deletion
-                header("Location: overview.php");
+                // Redirect to the index page after successful deletion
+                header("Location: index.php");
                 exit();
             } else {
                 echo "Error during deletion.";
@@ -61,7 +61,7 @@
     
     <form method="POST">
         <button type="submit" name="deleteRating">Yes</button>
-        <a href="overview.php">No</a>
+        <a href="index.php">No</a>
     </form>
 </body>
 </html>

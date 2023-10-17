@@ -16,7 +16,7 @@
         Rating: <input type="number" name="rating" id="rating" min="1" max="5" required>
         <br>
         <button type="submit" name="addnewrating">Submit</button>
-        <a href="overview.php">Cancel</a>
+        <a href="index.php">Cancel</a>
     </form>
 
     <script>
@@ -74,8 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['addnewrating'])) {
             $stmt->bind_param('sssi', $username, $artist, $song, $rating);
 
             if ($stmt->execute()) {
-                // Redirect to overview.php
-                header("Location: overview.php");
+                // Redirect to index.php
+                header("Location: index.php");
                 exit();
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;

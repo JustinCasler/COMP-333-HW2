@@ -5,3 +5,4 @@ $servername = "localhost";
     $dbname = "music_db";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
+?>
