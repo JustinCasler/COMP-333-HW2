@@ -23,10 +23,10 @@ To set up this project locally. Clone this repo and download xxamp and set up yo
 
 - login.php: Code responsible for the login page and checking if users exist in the users table
 - registration.php: Code responsible for the registration page and creating new users in the users table
-- overview.php: Code responsible for showing all the songs and ratings. Displays all entries in the ratings table.
-- newrating.php: Code responsible for the page that creates a new rating in the ratings table that gets displayed on overview.php.
+- index.php: Code responsible for showing all the songs and ratings. Displays all entries in the ratings table.
+- newrating.php: Code responsible for the page that creates a new rating in the ratings table that gets displayed on index.php.
 - update.php: Code responsible for the page that updates ratings in the ratings table.
-- viewrating.php: Code responsible for the page that displays details about any rating shown in overview.php.
+- viewrating.php: Code responsible for the page that displays details about any rating shown in index.php.
 - delete.php: Code responsible for the page that deletes ratings from the ratings table.
 - includes/dbh.php: Code that establishes a connection with our database that can be called in any php code.
 
