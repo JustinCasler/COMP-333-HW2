@@ -14,7 +14,7 @@
     ?>
     <text>You are logged in as user: <?php echo $_SESSION['username']; ?></text>
     <p>
-    <a href="login.php">Logout</a>
+    <a href="?logout=1">Logout</a>
     <br>
     <h1>Song Ratings</h1>
     <a href="newrating.php">Add New Song Rating</a>
@@ -30,7 +30,14 @@
         </tr>
         <?php
         include_once 'includes/dbh.php';
-
+        //End session and redirect to login.php when user click on the logout link
+        if (isset($_GET['logout'])) {
+            // User clicked the logout link
+            session_destroy(); // Destroy the session data
+            $conn->close(); // Close the database connection
+            header("Location: login.php"); // Redirect to the login page
+            exit(); // Stop executing the rest of the page
+        }
         // Prepare the SQL statement with placeholders
         $sql = "SELECT ID, username, artist, song, rating FROM ratings";
         $stmt = $conn->prepare($sql);
