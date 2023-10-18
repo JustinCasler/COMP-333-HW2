@@ -39,6 +39,13 @@
     <!-- HTML form displayed to the user -->
     <h1>Music DB Sign Up</h1>
     <body>
+    <?php 
+        session_start(); 
+        if (isset($_SESSION['username'])) {
+            header("Location: index.php");
+            exit(); // Stop executing the rest of the page
+        }
+    ?>
         <form method="POST" onsubmit="return validateForm()">  
             Username: <input type="text" name="name" id="username">
             <br>
