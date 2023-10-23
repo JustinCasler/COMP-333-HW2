@@ -18,7 +18,7 @@ We created a database called music_db, with two tables: "users" and "ratings"
 
 *primary key: id, foreign key: username, id auto-increment*
 
-To set up this project locally. Clone this repo and download xxamp and set up your database according to our specifications. Start the MySql Database and Apache web server from manager-osx which comes with xxamp. Go into the htdocs folder within xxamp directory and drag this projects folder into htdocs. Navigate to localhost/COMP-333-hw2/login.php or whatever the pathname is to the php files withing htdocs. 
+To set up this project locally. Clone this repo, download xxamp, and set up your database according to our specifications. Start the MySql Database and Apache web server from manager-osx which comes with xxamp. Go into the htdocs folder within xxamp directory and drag this projects folder into htdocs. Navigate to localhost/COMP-333-hw2/login.php or whatever the pathname is to the php files withing htdocs. 
 ## Code breakdown
 
 - login.php: Code responsible for the login page and checking if users exist in the users table
@@ -31,5 +31,5 @@ To set up this project locally. Clone this repo and download xxamp and set up yo
 - includes/dbh.php: Code that establishes a connection with our database that can be called in any php code.
 
 ## Deployment
-
-Visit out site [here](http://playlistpulse.great-site.net/)
+Our site is hosted using infinity free.
+Visit out site [here](https://playlistpulse.great-site.net/) or copy and past the link: https://playlistpulse.great-site.net/
